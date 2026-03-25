@@ -15,7 +15,7 @@ jobs:
     steps:
       # 1. Checks-out repository under $GITHUB_WORKSPACE
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # 2. Sets up the Flutter environment
       - name: Set up Flutter

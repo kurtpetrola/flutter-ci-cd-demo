@@ -1,0 +1,44 @@
+name: Flutter CI
+
+# This defines when the pipeline will run
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    # The type of runner that the job will execute on
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checks-out repository under $GITHUB_WORKSPACE
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Sets up the Flutter environment
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+          # We can enforce a specific version later, uncomment below:
+          # flutter-version: '3.19.0'
+
+      # 3. Gets the dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # 4. Checks if the code is formatted properly
+      # The '--set-exit-if-changed' flag ensures the pipeline fails if files need formatting
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      # 5. Runs Dart analyzer to find static analysis issues
+      - name: Analyze code
+        run: flutter analyze
+
+      # 6. Runs the unit tests
+      - name: Run tests
+        run: flutter test

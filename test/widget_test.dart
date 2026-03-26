@@ -25,6 +25,9 @@ void main() {
 
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+
+    // Expect '5' instead of '1'
+    // This will break the widget test expectation
+    expect(find.text('5'), findsOneWidget);
   });
 }

@@ -19,13 +19,12 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
-    // SigningConfigs block
+    // SigningConfigs block using Kotlin syntax
     signingConfigs {
-        release {
-            // It will read from GitHub Actions environment variables
+        create("release") {
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
-            storeFile = file("upload-keystore.jks") // The file we decode in the YAML
+            storeFile = file("upload-keystore.jks")
             storePassword = System.getenv("KEYSTORE_PASSWORD")
         }
     }
@@ -42,12 +41,12 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
 
             // Tell the release build to use the config we just made above
-            signingConfig = signingConfigs.release
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

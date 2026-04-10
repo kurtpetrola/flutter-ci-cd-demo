@@ -43,9 +43,9 @@ jobs:
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
 
-      # Build the release APK, passing the secrets as environment variables
+      # Build the release APKs, split by architecture
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --split-per-abi
         env:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -59,11 +59,11 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
-      # Upload the compiled APK and App Bundle to a new GitHub Release
+      # Upload the compiled APKs and App Bundle to a new GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/flutter-apk/app-*-release.apk
             build/app/outputs/bundle/release/app-release.aab
           generate_release_notes: true
